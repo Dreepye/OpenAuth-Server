@@ -48,13 +48,34 @@ if($request['method'] == "POST")
 				Core\Queries::execute('UPDATE openauth_users SET accessToken=:accessToken WHERE clientToken=:clientToken', ['accessToken' => $newAccessToken, 'clientToken' => $clientToken]);
 				
 				// Creating an array of the new infos
+				/*
 				$jsonArray = array(
 						'accessToken' => $newAccessToken,
 						'clientToken' => $clientToken
 				);
-
+				*/
+				
+				/*Réparation du refresh....
+				Pour avoir accès au response.getSelectedProfile().getName() et au response.getSelectedProfile().getId()
+				dans le RefreshResponse
+				*/
+				$result = [
+					'accessToken' => $newAccessToken,
+					'clientToken' => $clientToken,
+					'availableProfiles' => [
+					[
+						'id' => $playerUUID,
+						'name' => $username
+					]
+					],
+						'selectedProfile' => [
+						'id' => $playerUUID,
+						'name' => $username
+					]
+				];
 				// Printing it as a JSON
-				echo json_encode($jsonArray);
+				//echo json_encode($jsonArray);
+				echo json_encode($result);
 			}
 
 			// Else if the given client token isn't the same as the one of the database
